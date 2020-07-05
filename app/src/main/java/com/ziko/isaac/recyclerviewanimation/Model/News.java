@@ -24,6 +24,9 @@ public class News {
         this.title = title;
     }
 
+    public News() {
+    }
+
     public String getDescription() {
         return description;
     }
