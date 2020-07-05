@@ -4,10 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#fff">
+    android:background="#fff"
+    android:layout_marginTop="8dp">
 
     <RelativeLayout
-        android:id="@+id/relativeLayout"
+        android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
@@ -55,8 +56,11 @@
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
+            android:layout_toEndOf="@id/tv_title"
+            android:gravity="end"
             android:text="Date"
-            android:textColor="@color/content_text_color" />
+            android:textColor="@color/content_text_color"
+            android:layout_toRightOf="@id/tv_title" />
 
 
     </RelativeLayout>
@@ -66,9 +70,9 @@
         android:layout_width="33dp"
         android:layout_height="33dp"
         android:layout_marginTop="15dp"
-        app:layout_constraintEnd_toStartOf="@+id/relativeLayout"
-        app:layout_constraintStart_toStartOf="@+id/relativeLayout"
-        app:layout_constraintTop_toTopOf="@+id/relativeLayout"
+        app:layout_constraintEnd_toStartOf="@+id/container"
+        app:layout_constraintStart_toStartOf="@+id/container"
+        app:layout_constraintTop_toTopOf="@+id/container"
         tools:srcCompat="@drawable/circle3" />
 
 
