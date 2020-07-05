@@ -46,6 +46,18 @@ public class MainActivity extends AppCompatActivity {
         newsRecyclerView = findViewById(R.id.news_recycler_view);
         mData = new ArrayList<>();
 
+        //Load the Theme State and pass to the adapter parameters below
+        isDark = getThemeStatePref();
+        if(isDark){
+            //dark mode theme is on
+            rootLayout.setBackgroundColor(getResources().getColor(R.color.black));
+
+        } else{
+            //light mode theme is on
+            rootLayout.setBackgroundColor(getResources().getColor(R.color.white));
+
+        }
+
         //filling the list
         fillTheList();
 
@@ -90,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void adapterSetup() {
-        adapter = new RecyclerViewAdapter(this, mData);
+        adapter = new RecyclerViewAdapter(this, mData, isDark);
         newsRecyclerView.setAdapter(adapter);
         newsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     }

@@ -50,9 +50,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         //Animation for the whole card
         holder.container.setAnimation(AnimationUtils.loadAnimation(context, R.anim.fade_scale_animation));
 
-
-
-
         holder.tv_title.setText(mData.get(position).getTitle());
         holder.tv_description.setText(mData.get(position).getDescription());
         holder.tv_date.setText(mData.get(position).getDate());
@@ -81,12 +78,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             tv_date = itemView.findViewById(R.id.tv_date);
             img_user = itemView.findViewById(R.id.img_user);
 
-            if(isDark){
+            if (isDark) {
                 setDarkMode();
             }
         }
 
-        private void setDarkMode(){
+        private void setDarkMode() {
             container.setBackgroundResource(R.drawable.card_bg_dark);
         }
 
