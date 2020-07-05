@@ -23,7 +23,7 @@
         app:layout_constraintVertical_bias="0.0"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab-switcher"
+        android:id="@+id/fab_switcher"
         android:layout_width="56dp"
         android:layout_height="56dp"
         android:layout_marginEnd="28dp"

@@ -21,7 +21,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     private Context context;
     private List<News> mData;
-    private RelativeLayout container;
+    private boolean isDark = false;
+
+    public RecyclerViewAdapter(Context context, List<News> mData, boolean isDark) {
+        this.context = context;
+        this.mData = mData;
+        this.isDark = isDark;
+    }
 
     public RecyclerViewAdapter(Context context, List<News> mData) {
         this.context = context;
@@ -59,7 +65,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         return mData.size();
     }
 
-    public static class MyViewHolder extends RecyclerView.ViewHolder {
+    public class MyViewHolder extends RecyclerView.ViewHolder {
 
         private TextView tv_title;
         private TextView tv_description;
@@ -74,6 +80,14 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             tv_description = itemView.findViewById(R.id.tv_description);
             tv_date = itemView.findViewById(R.id.tv_date);
             img_user = itemView.findViewById(R.id.img_user);
+
+            if(isDark){
+                setDarkMode();
+            }
+        }
+
+        private void setDarkMode(){
+            container.setBackgroundResource(R.drawable.card_bg_dark);
         }
 
     }
