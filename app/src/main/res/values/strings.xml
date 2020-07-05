@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">RecyclerViewAnimation</string>
     <string name="hello_world">hello world</string>
+    <string name="button">Button</string>
 </resources>
