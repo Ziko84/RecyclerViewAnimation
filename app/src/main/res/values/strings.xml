@@ -3,7 +3,6 @@
     <string name="hello_world">hello world</string>
     <string name="button">Button</string>
     <string name="textview">TextView</string>
-    <string name="textview">TextView</string>
     <string name="simple_title_text">Simple Title Text</string>
     <string name="ghj">There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don\'t look even slightly believable.</string>
 </resources>
