@@ -58,7 +58,7 @@
             android:layout_marginRight="16dp"
             android:layout_toEndOf="@id/tv_title"
             android:gravity="end"
-            android:text="Date"
+            android:text="@string/date"
             android:textColor="@color/content_text_color"
             android:layout_toRightOf="@id/tv_title" />
 
@@ -73,7 +73,8 @@
         app:layout_constraintEnd_toStartOf="@+id/container"
         app:layout_constraintStart_toStartOf="@+id/container"
         app:layout_constraintTop_toTopOf="@+id/container"
-        tools:srcCompat="@drawable/circle3" />
+        tools:srcCompat="@drawable/circle3"
+        android:contentDescription="@string/todo" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

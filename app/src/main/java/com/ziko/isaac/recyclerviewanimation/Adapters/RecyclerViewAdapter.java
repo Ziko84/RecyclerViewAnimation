@@ -42,7 +42,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         holder.img_user.setAnimation(AnimationUtils.loadAnimation(context, R.anim.fade_transition_animation));
 
         //Animation for the whole card
-        holder.container.setAnimation(AnimationUtils.loadAnimation(context, R.anim.fade_transition_animation));
+        holder.container.setAnimation(AnimationUtils.loadAnimation(context, R.anim.fade_scale_animation));
 
 
 
