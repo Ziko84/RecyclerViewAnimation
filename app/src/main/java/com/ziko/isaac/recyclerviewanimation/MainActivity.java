@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.EditText;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.ziko.isaac.recyclerviewanimation.Adapters.RecyclerViewAdapter;
@@ -26,11 +27,11 @@ public class MainActivity extends AppCompatActivity {
     private boolean isDark = false;
     RecyclerViewAdapter adapter;
     ConstraintLayout rootLayout;
+    private EditText searchInput;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         //make this activity a full screen
         makeActivityFullScreen();
 
@@ -42,20 +43,20 @@ public class MainActivity extends AppCompatActivity {
         //init Views, Recycler and List.
         fab = findViewById(R.id.fab_switcher);
         rootLayout = findViewById(R.id.rootlayout);
-
         newsRecyclerView = findViewById(R.id.news_recycler_view);
         mData = new ArrayList<>();
+        searchInput = findViewById(R.id.et_search);
 
         //Load the Theme State and pass to the adapter parameters below
         isDark = getThemeStatePref();
-        if(isDark){
+        if (isDark) {
             //dark mode theme is on
+            searchInput.setBackgroundResource(R.drawable.card_bg_dark);
             rootLayout.setBackgroundColor(getResources().getColor(R.color.black));
-
-        } else{
+        } else {
             //light mode theme is on
+            searchInput.setBackgroundResource(R.drawable.card_bg);
             rootLayout.setBackgroundColor(getResources().getColor(R.color.white));
-
         }
 
         //filling the list
@@ -69,8 +70,10 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 isDark = !isDark;
                 if (isDark) {
+                    searchInput.setBackgroundResource(R.drawable.card_bg_dark);
                     rootLayout.setBackgroundColor(getResources().getColor(R.color.black));
                 } else {
+                    searchInput.setBackgroundResource(R.drawable.card_bg);
                     rootLayout.setBackgroundColor(getResources().getColor(R.color.white));
                 }
 
@@ -91,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
         editor.apply();
     }
 
-    private boolean getThemeStatePref(){
+    private boolean getThemeStatePref() {
         SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("myPref", MODE_PRIVATE);
         return sharedPreferences.getBoolean("isDark", false);
     }
