@@ -18,7 +18,6 @@ public class MainActivity extends AppCompatActivity {
 
     private RecyclerView newsRecyclerView;
     private List<News> mData;
-    private RecyclerViewAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void adapterSetup() {
-        adapter = new RecyclerViewAdapter(this, mData);
+        RecyclerViewAdapter adapter = new RecyclerViewAdapter(this, mData);
         newsRecyclerView.setAdapter(adapter);
         newsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
