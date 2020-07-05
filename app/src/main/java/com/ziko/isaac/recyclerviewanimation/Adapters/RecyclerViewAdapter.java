@@ -5,6 +5,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -15,23 +17,27 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.ziko.isaac.recyclerviewanimation.Model.News;
 import com.ziko.isaac.recyclerviewanimation.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.MyViewHolder> {
+public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.MyViewHolder> implements Filterable {
 
     private Context context;
     private List<News> mData;
+    private List<News> mDataFilter;
     private boolean isDark = false;
 
     public RecyclerViewAdapter(Context context, List<News> mData, boolean isDark) {
         this.context = context;
         this.mData = mData;
         this.isDark = isDark;
+        this.mDataFilter = mData;
     }
 
     public RecyclerViewAdapter(Context context, List<News> mData) {
         this.context = context;
         this.mData = mData;
+        this.mDataFilter = mData;
     }
 
     @NonNull
@@ -50,16 +56,47 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         //Animation for the whole card
         holder.container.setAnimation(AnimationUtils.loadAnimation(context, R.anim.fade_scale_animation));
 
-        holder.tv_title.setText(mData.get(position).getTitle());
-        holder.tv_description.setText(mData.get(position).getDescription());
-        holder.tv_date.setText(mData.get(position).getDate());
+        holder.tv_title.setText(mDataFilter.get(position).getTitle());
+        holder.tv_description.setText(mDataFilter.get(position).getDescription());
+        holder.tv_date.setText(mDataFilter.get(position).getDate());
 
-        holder.img_user.setImageResource(mData.get(position).getImg());
+        holder.img_user.setImageResource(mDataFilter.get(position).getImg());
     }
 
     @Override
     public int getItemCount() {
-        return mData.size();
+        return mDataFilter.size();
+    }
+
+    @Override
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence charSequence) {
+                String key = charSequence.toString();
+                if (key.isEmpty()) {
+                    mDataFilter = mData;
+                } else {
+                    List<News> list_filtered = new ArrayList<>();
+                    for (News row : mData) {
+                        if (row.getTitle().toLowerCase().contains(key.toLowerCase())) {
+                            list_filtered.add(row);
+                        }
+                    }
+
+                    mDataFilter = list_filtered;
+                }
+                FilterResults filterResults = new FilterResults();
+                filterResults.values = mDataFilter;
+                return filterResults;
+            }
+
+            @Override
+            protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+                mDataFilter = (List<News>) filterResults.values;
+                notifyDataSetChanged();
+            }
+        };
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {

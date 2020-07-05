@@ -7,6 +7,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -23,7 +25,6 @@ public class MainActivity extends AppCompatActivity {
 
     private RecyclerView newsRecyclerView;
     private List<News> mData;
-    private FloatingActionButton fab;
     private boolean isDark = false;
     RecyclerViewAdapter adapter;
     ConstraintLayout rootLayout;
@@ -41,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().hide();
 
         //init Views, Recycler and List.
-        fab = findViewById(R.id.fab_switcher);
+        FloatingActionButton fab = findViewById(R.id.fab_switcher);
         rootLayout = findViewById(R.id.rootlayout);
         newsRecyclerView = findViewById(R.id.news_recycler_view);
         mData = new ArrayList<>();
@@ -83,7 +84,22 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        searchInput.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                adapter.getFilter().filter(charSequence);
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
     }
 
     private void saveThemeStatePref(boolean isDark) {
