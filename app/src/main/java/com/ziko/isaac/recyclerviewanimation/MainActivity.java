@@ -18,7 +18,7 @@ public class MainActivity extends AppCompatActivity {
 
     private RecyclerView newsRecyclerView;
     private List<News> mData;
-    RecyclerViewAdapter adapter;
+    private RecyclerViewAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void fillTheList() {
         mData.add(new News("Java SE 8", "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout", "4th July 2014", R.drawable.circle2));
-        mData.add(new News("Xcode Device", "It is a long established fact that a reader will be distracted at its layout", "4th July 2024", R.drawable.circle3));
+        mData.add(new News("Xcode Device kdfv fkbjkdjhfdhfdshfljhsdjkfhdjkfhsdkfhdskjfhdsk", "It is a long established fact that a reader will be distracted at its layout", "4th July 2024", R.drawable.circle3));
         mData.add(new News("Android Studio", "It is a long established fact that a reader will be distracted by the readable content of a page when looking  layout", "4th June 2004", R.drawable.circle1));
         mData.add(new News("After Effect", "It is a long established fact that a reader will be distracted by the readable content of", "4th July 1984", R.drawable.circle4));
         mData.add(new News("Adobe Photoshop", "It is a long established fact that a reader will be distracted by the reada its layout", "4th July 1974", R.drawable.circle5));
