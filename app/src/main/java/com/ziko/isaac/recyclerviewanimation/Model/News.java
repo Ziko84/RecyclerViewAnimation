@@ -6,15 +6,6 @@ public class News {
     private String date;
     private int img;
 
-    @Override
-    public String toString() {
-        return "News{" +
-                "title='" + title + '\'' +
-                ", description='" + description + '\'' +
-                ", date='" + date + '\'' +
-                ", img=" + img +
-                '}';
-    }
 
     public String getTitle() {
         return title;
