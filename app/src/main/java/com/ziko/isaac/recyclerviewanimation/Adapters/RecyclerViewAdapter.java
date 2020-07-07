@@ -27,7 +27,14 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     private Context context;
     private List<YellowFlowerModel> mData;
     private List<YellowFlowerModel> mDataFilter;
+    private onItemClickListener mListener;
     private boolean isDark = false;
+    public interface onItemClickListener{
+        void onItemclick(int position);}
+
+    public void setOnItemClickListener(onItemClickListener listener){
+        mListener = listener;
+    }
 
     public RecyclerViewAdapter(Context context, List<YellowFlowerModel> mData, boolean isDark) {
         this.context = context;
@@ -121,6 +128,18 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             tv_description = itemView.findViewById(R.id.tv_description);
             tv_date = itemView.findViewById(R.id.tv_date);
             img_user = itemView.findViewById(R.id.img_user);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if(mListener!=null){
+                        int position = getAdapterPosition();
+                        if (position!=RecyclerView.NO_POSITION){
+                            mListener.onItemclick(position);
+                        }
+                    }
+                }
+            });
 
             if (isDark) {
                 setDarkMode();
