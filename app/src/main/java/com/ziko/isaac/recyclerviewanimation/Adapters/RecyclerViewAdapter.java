@@ -14,7 +14,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.squareup.picasso.Picasso;
 import com.ziko.isaac.recyclerviewanimation.Model.News;
+import com.ziko.isaac.recyclerviewanimation.Model.YellowFlowerModel;
 import com.ziko.isaac.recyclerviewanimation.R;
 
 import java.util.ArrayList;
@@ -23,18 +25,18 @@ import java.util.List;
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.MyViewHolder> implements Filterable {
 
     private Context context;
-    private List<News> mData;
-    private List<News> mDataFilter;
+    private List<YellowFlowerModel> mData;
+    private List<YellowFlowerModel> mDataFilter;
     private boolean isDark = false;
 
-    public RecyclerViewAdapter(Context context, List<News> mData, boolean isDark) {
+    public RecyclerViewAdapter(Context context, List<YellowFlowerModel> mData, boolean isDark) {
         this.context = context;
         this.mData = mData;
         this.isDark = isDark;
         this.mDataFilter = mData;
     }
 
-    public RecyclerViewAdapter(Context context, List<News> mData) {
+    public RecyclerViewAdapter(Context context, List<YellowFlowerModel> mData) {
         this.context = context;
         this.mData = mData;
         this.mDataFilter = mData;
@@ -49,6 +51,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
+        String creator = mDataFilter.get(position).getmCreator();
+        String imageURL = mDataFilter.get(position).getmImageUrl();
+        int likeCount = mData.get(position).getmLikes();
 
         //Animation for Image
         holder.img_user.setAnimation(AnimationUtils.loadAnimation(context, R.anim.fade_transition_animation));
@@ -56,11 +61,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         //Animation for the whole card
         holder.container.setAnimation(AnimationUtils.loadAnimation(context, R.anim.fade_scale_animation));
 
-        holder.tv_title.setText(mDataFilter.get(position).getTitle());
-        holder.tv_description.setText(mDataFilter.get(position).getDescription());
-        holder.tv_date.setText(mDataFilter.get(position).getDate());
+        holder.tv_title.setText(mDataFilter.get(position).getmCreator());
+        holder.tv_description.setText(mDataFilter.get(position).getmImageUrl());
+        holder.tv_date.setText("Likes " +mDataFilter.get(position).getmLikes());
 
-        holder.img_user.setImageResource(mDataFilter.get(position).getImg());
+//        holder.img_user.setImageResource(mDataFilter.get(position).getImg());
+        Picasso.get().load(imageURL).fit().centerInside().into(holder.img_user);
+
     }
 
     @Override
@@ -77,9 +84,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 if (key.isEmpty()) {
                     mDataFilter = mData;
                 } else {
-                    List<News> list_filtered = new ArrayList<>();
-                    for (News row : mData) {
-                        if (row.getTitle().toLowerCase().contains(key.toLowerCase())) {
+                    List<YellowFlowerModel> list_filtered = new ArrayList<>();
+                    for (YellowFlowerModel row : mData) {
+                        if (row.getmCreator().toLowerCase().contains(key.toLowerCase())) {
                             list_filtered.add(row);
                         }
                     }
@@ -93,7 +100,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
             @Override
             protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
-                mDataFilter = (List<News>) filterResults.values;
+                mDataFilter = (List<YellowFlowerModel>) filterResults.values;
                 notifyDataSetChanged();
             }
         };

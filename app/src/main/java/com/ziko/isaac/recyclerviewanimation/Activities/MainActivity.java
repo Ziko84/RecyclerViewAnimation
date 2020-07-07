@@ -26,6 +26,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.ziko.isaac.recyclerviewanimation.Adapters.RecyclerViewAdapter;
 import com.ziko.isaac.recyclerviewanimation.Model.EasySaleModel;
 import com.ziko.isaac.recyclerviewanimation.Model.News;
+import com.ziko.isaac.recyclerviewanimation.Model.YellowFlowerModel;
 import com.ziko.isaac.recyclerviewanimation.R;
 
 import org.json.JSONArray;
@@ -39,13 +40,15 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    private RecyclerView newsRecyclerView;
-    private List<News> mData;
+    private RecyclerView flowersRecyclerView;
+    private List<YellowFlowerModel> mData;
     private boolean isDark = false;
-    RecyclerViewAdapter adapter;
+    private RecyclerViewAdapter adapter;
     ConstraintLayout rootLayout;
     private EditText searchInput;
-    private ArrayList<EasySaleModel> eSList = new ArrayList();
+    private ArrayList<YellowFlowerModel> eSList = new ArrayList();
+    private RequestQueue requestQueue;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +64,8 @@ public class MainActivity extends AppCompatActivity {
         //init Views, Recycler and List.
         FloatingActionButton fab = findViewById(R.id.fab_switcher);
         rootLayout = findViewById(R.id.rootlayout);
-        newsRecyclerView = findViewById(R.id.news_recycler_view);
+        flowersRecyclerView = findViewById(R.id.news_recycler_view);
+        flowersRecyclerView.setHasFixedSize(true);
         mData = new ArrayList<>();
         searchInput = findViewById(R.id.et_search);
 
@@ -77,16 +81,17 @@ public class MainActivity extends AppCompatActivity {
             rootLayout.setBackgroundColor(getResources().getColor(R.color.white));
         }
 
-        //filling the list
-        fillTheList();
+        //init the list
+        mData = new ArrayList<>();
 
 //        getJson();
 
+        requestQueue = Volley.newRequestQueue(this);
 
-//        parseJSON();
+        parseJSON();
 
         //Set the Adapter
-        adapterSetup();
+//        adapterSetup();
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -101,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 adapter = new RecyclerViewAdapter(getApplicationContext(), mData, isDark);
-                newsRecyclerView.setAdapter(adapter);
+                flowersRecyclerView.setAdapter(adapter);
                 saveThemeStatePref(isDark);
             }
         });
@@ -125,8 +130,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void parseJSON() {
-        RequestQueue mRequestQueue = Volley.newRequestQueue(this);
-        String url = "https://pixabay.com/api/?key={ KEY }&q=yellow+flowers&image_type=photo\n";
+        String url = "https://pixabay.com/api/?key=17376409-bfc9ecbbaae96da590445cc9e&q=yellow+flowers&image_type=photo&pretty=true";
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -137,7 +141,11 @@ public class MainActivity extends AppCompatActivity {
                         String creatorName = hit.getString("user");
                         String imageURL = hit.getString("webformatURL");
                         int likeCount = hit.getInt("likes");
-                        System.out.println(imageURL);                    }
+                        mData.add(new YellowFlowerModel(imageURL, creatorName, likeCount));
+                    }
+
+                    adapterSetup();
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -145,10 +153,10 @@ public class MainActivity extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-               error.printStackTrace();
+                error.printStackTrace();
             }
         });
-        mRequestQueue.add(request);
+        requestQueue.add(request);
 
     }
 
@@ -199,39 +207,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void adapterSetup() {
         adapter = new RecyclerViewAdapter(this, mData, isDark);
-        newsRecyclerView.setAdapter(adapter);
-        newsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        flowersRecyclerView.setAdapter(adapter);
+        flowersRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
-    private void fillTheList() {
-        mData.add(new News("מלל חופשי", "לורם איפסום דולור סיט אמט, קונסקטורר אדיפיסינג אלית נולום ארווס סאפיאן - פוסיליס קוויס, אקווזמן קוואזי במר מודוף. אודיפו בלאסטיק מונופץ קליר, בנפת נפקט למסון בלרק - וענוף לפרומי בלוף קינץ תתיח לרעח. לת צשחמי הועניב היושבב שערש שמחויט - שלושע ותלברו חשלו שעותלשך וחאית נובש ערששף. זותה מנק הבקיץ אפאח דלאמת יבש, כאנה ניצאחו נמרגי שהכים תוק, הדש שנרא התידם הכייר וק", "4th July 2014", R.drawable.circle2));
-        mData.add(new News("cat", "It is a long established fact that a reader will be distracted at its layout", "4th July 2024", R.drawable.circle3));
-        mData.add(new News("מסופון ריווחית", "It is a long established fact that a reader will be distracted by the readable content of a page when looking  layout", "4th June 2004", R.drawable.circle1));
-        mData.add(new News("פרח", "It is a long established fact that a reader will be distracted by the readable content of", "4th July 1984", R.drawable.circle4));
-        mData.add(new News("גלובוס", "It is a long established fact that a reader will be distracted by the reada its layout", "4th July 1974", R.drawable.circle5));
-        mData.add(new News("בראץ", "It is a long established fact that a reader will ben looking at its layout", "4th July 1567", R.drawable.circle6));
-        mData.add(new News("מיני מאוס", "It is a long established fact that a reader will be distracted by the readable at its layout", "4th July 1098", R.drawable.circle6));
-        mData.add(new News("מלל חופשי", "לורם איפסום דולור סיט אמט, קונסקטורר אדיפיסינג אלית נולום ארווס סאפיאן - פוסיליס קוויס, אקווזמן קוואזי במר מודוף. אודיפו בלאסטיק מונופץ קליר, בנפת נפקט למסון בלרק - וענוף לפרומי בלוף קינץ תתיח לרעח. לת צשחמי הועניב היושבב שערש שמחויט - שלושע ותלברו חשלו שעותלשך וחאית נובש ערששף. זותה מנק הבקיץ אפאח דלאמת יבש, כאנה ניצאחו נמרגי שהכים תוק, הדש שנרא התידם הכייר וק", "4th July 2014", R.drawable.circle2));
-        mData.add(new News("חתול", "It is a long established fact that a reader will be distracted at its layout", "4th July 2024", R.drawable.circle3));
-        mData.add(new News("מסופון ריווחית", "It is a long established fact that a reader will be distracted by the readable content of a page when looking  layout", "4th June 2004", R.drawable.circle1));
-        mData.add(new News("פרח", "It is a long established fact that a reader will be distracted by the readable content of", "4th July 1984", R.drawable.circle4));
-        mData.add(new News("גלובוס", "It is a long established fact that a reader will be distracted by the reada its layout", "4th July 1974", R.drawable.circle5));
-        mData.add(new News("בראץ", "It is a long established fact that a reader will ben looking at its layout", "4th July 1567", R.drawable.circle6));
-        mData.add(new News("מיני מאוס", "It is a long established fact that a reader will be distracted by the readable at its layout", "4th July 1098", R.drawable.circle6));
-        mData.add(new News("מלל חופשי", "לורם איפסום דולור סיט אמט, קונסקטורר אדיפיסינג אלית נולום ארווס סאפיאן - פוסיליס קוויס, אקווזמן קוואזי במר מודוף. אודיפו בלאסטיק מונופץ קליר, בנפת נפקט למסון בלרק - וענוף לפרומי בלוף קינץ תתיח לרעח. לת צשחמי הועניב היושבב שערש שמחויט - שלושע ותלברו חשלו שעותלשך וחאית נובש ערששף. זותה מנק הבקיץ אפאח דלאמת יבש, כאנה ניצאחו נמרגי שהכים תוק, הדש שנרא התידם הכייר וק", "4th July 2014", R.drawable.circle2));
-        mData.add(new News("חתול", "It is a long established fact that a reader will be distracted at its layout", "4th July 2024", R.drawable.circle3));
-        mData.add(new News("מסופון ריווחית", "It is a long established fact that a reader will be distracted by the readable content of a page when looking  layout", "4th June 2004", R.drawable.circle1));
-        mData.add(new News("פרח", "It is a long established fact that a reader will be distracted by the readable content of", "4th July 1984", R.drawable.circle4));
-        mData.add(new News("גלובוס", "It is a long established fact that a reader will be distracted by the reada its layout", "4th July 1974", R.drawable.circle5));
-        mData.add(new News("בראץ", "It is a long established fact that a reader will ben looking at its layout", "4th July 1567", R.drawable.circle6));
-        mData.add(new News("מיני מאוס", "It is a long established fact that a reader will be distracted by the readable at its layout", "4th July 1098", R.drawable.circle6));
-        mData.add(new News("מלל חופשי", "לורם איפסום דולור סיט אמט, קונסקטורר אדיפיסינג אלית נולום ארווס סאפיאן - פוסיליס קוויס, אקווזמן קוואזי במר מודוף. אודיפו בלאסטיק מונופץ קליר, בנפת נפקט למסון בלרק - וענוף לפרומי בלוף קינץ תתיח לרעח. לת צשחמי הועניב היושבב שערש שמחויט - שלושע ותלברו חשלו שעותלשך וחאית נובש ערששף. זותה מנק הבקיץ אפאח דלאמת יבש, כאנה ניצאחו נמרגי שהכים תוק, הדש שנרא התידם הכייר וק", "4th July 2014", R.drawable.circle2));
-        mData.add(new News("חתול", "It is a long established fact that a reader will be distracted at its layout", "4th July 2024", R.drawable.circle3));
-        mData.add(new News("מסופון ריווחית", "It is a long established fact that a reader will be distracted by the readable content of a page when looking  layout", "4th June 2004", R.drawable.circle1));
-        mData.add(new News("פרח", "It is a long established fact that a reader will be distracted by the readable content of", "4th July 1984", R.drawable.circle4));
-        mData.add(new News("גלובוס", "It is a long established fact that a reader will be distracted by the reada its layout", "4th July 1974", R.drawable.circle5));
-        mData.add(new News("בראץ", "It is a long established fact that a reader will ben looking at its layout", "4th July 1567", R.drawable.circle6));
-        mData.add(new News("מיני מאוס", "It is a long established fact that a reader will be distracted by the readable at its layout", "4th July 1098", R.drawable.circle6));
-
-    }
 }
