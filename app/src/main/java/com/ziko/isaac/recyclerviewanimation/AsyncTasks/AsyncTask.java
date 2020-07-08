@@ -1,16 +1,18 @@
 package com.ziko.isaac.recyclerviewanimation.AsyncTasks;
 
 import android.content.Context;
-import android.widget.Toast;
 
-import com.ziko.isaac.recyclerviewanimation.DataBaseHelper;
+import com.ziko.isaac.recyclerviewanimation.Database.DataBaseHelper;
 
 public class AsyncTask extends android.os.AsyncTask<String, Void, Long> {
-    Context context;
-    DataBaseHelper db;
-    long result;
 
-    public AsyncTask(Context ct){
+    //TODO: Weak reference for Context
+    private Context context;
+    private DataBaseHelper db;
+    private long result;
+
+    //c-tor
+    public AsyncTask(Context ct) {
         context = ct;
         db = new DataBaseHelper(ct);
     }
@@ -26,7 +28,6 @@ public class AsyncTask extends android.os.AsyncTask<String, Void, Long> {
 
     @Override
     protected void onPostExecute(Long aLong) {
-//        Toast.makeText(context, "Data Inserted To The SQLite Database" + aLong, Toast.LENGTH_LONG).show();
         super.onPostExecute(aLong);
     }
 }

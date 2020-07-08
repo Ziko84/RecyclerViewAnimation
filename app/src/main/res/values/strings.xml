@@ -13,4 +13,5 @@
     <string name="creator_nametwo">Creator Name</string>
     <string name="likes_three">Likes:</string>
     <string name="parse_json_api">Parse JSON API</string>
+    <string name="recyclerview_three">RecyclerView</string>
 </resources>

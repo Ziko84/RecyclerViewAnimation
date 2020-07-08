@@ -1,5 +1,4 @@
-package com.ziko.isaac.recyclerviewanimation;
-
+package com.ziko.isaac.recyclerviewanimation.Database;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -31,8 +30,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         cv.put("image_url", s_img_url);
         cv.put("likes", s_likes);
 
-        long result = db.insert("flowers_table", null, cv);
-        return result;
+        return db.insert("flowers_table", null, cv);
     }
 
     public Cursor readAllDataFromDB(){

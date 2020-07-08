@@ -22,7 +22,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/tv_title"
+            android:id="@+id/tv_creator"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
@@ -36,19 +36,19 @@
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/tv_description"
+            android:id="@+id/tv_img_url"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/tv_title"
-            android:layout_alignStart="@id/tv_title"
-            android:layout_alignLeft="@id/tv_title"
+            android:layout_below="@+id/tv_creator"
+            android:layout_alignStart="@id/tv_creator"
+            android:layout_alignLeft="@id/tv_creator"
             android:layout_marginTop="8dp"
             android:lineSpacingExtra="7dp"
             android:text="@string/ghj"
             android:textColor="@color/content_text_color" />
 
         <TextView
-            android:id="@+id/tv_date"
+            android:id="@+id/tv_likes"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
