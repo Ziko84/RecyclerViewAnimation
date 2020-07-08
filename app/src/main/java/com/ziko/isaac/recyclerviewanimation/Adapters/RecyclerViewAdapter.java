@@ -28,7 +28,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     private Context context;
     private ArrayList<String> creatorList, imgUrlList;
     private ArrayList<Integer> likesList;
-    private Cursor cursor;
     private List<YellowFlowerModel> mData;
     private List<YellowFlowerModel> mDataFilter;
     private onItemClickListener mListener;
@@ -74,21 +73,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-//        if(!cursor.moveToPosition(position)){
-//            return;
-//        }
-//
-//        String creator_two = cursor.getString(cursor.getColumnIndex("creator"));
-//        String image_url__two = cursor.getString(cursor.getColumnIndex("image_url"));
-//        int likes__two = cursor.getInt(cursor.getColumnIndex("likes"));
-//
-//        holder.tv_creator.setText(creator_two);
-//        holder.tv_description.setText(image_url__two);
-//        holder.tv_likes.setText(String.valueOf(likes__two));
 
-//        String creator = mDataFilter.get(position).getmCreator();
-//        String imageURL = mDataFilter.get(position).getmImageUrl();
-//        int likeCount = mData.get(position).getmLikes();
 
         //Animation for Image
         holder.img_user.setAnimation(AnimationUtils.loadAnimation(context, R.anim.fade_transition_animation));
@@ -96,17 +81,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         //Animation for the whole card
         holder.container.setAnimation(AnimationUtils.loadAnimation(context, R.anim.fade_scale_animation));
 
-//        holder.tv_creator.setText(mDataFilter.get(position).getmCreator());
-//        holder.tv_description.setText(mDataFilter.get(position).getmImageUrl());
-//        holder.tv_likes.setText("Likes " +mDataFilter.get(position).getmLikes());
-//        Picasso.get().load(imageURL).fit().centerInside().into(holder.img_user);
-
         holder.tv_creator.setText(String.valueOf(creatorList.get(position)));
         holder.tv_description.setText(String.valueOf(imgUrlList.get(position)));
         holder.tv_likes.setText(String.valueOf(likesList.get(position)));
         Picasso.get().load(String.valueOf(imgUrlList.get(position))).fit().centerInside().into(holder.img_user);
-
-
     }
 
     @Override

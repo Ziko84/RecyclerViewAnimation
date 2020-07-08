@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -56,7 +57,6 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
     private RequestQueue requestQueue;
     private SQLiteDatabase mDataBae;
     DataBaseHelper dBh;
-    AsyncTask aSync;
 
     String creatorName = "";
     String imageURL = "";
@@ -92,12 +92,13 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
         searchInput = findViewById(R.id.et_search);
         flowersRecyclerView.setVisibility(View.INVISIBLE);
 
+
         dBh = new DataBaseHelper(this);
         mDataBae = dBh.getReadableDatabase();
 
         //Load the Theme State and pass to the adapter parameters below
         isDark = getThemeStatePref();
-        if (isDark) {
+        if (true) {
             //dark mode theme is on
             searchInput.setBackgroundResource(R.drawable.card_bg_dark);
             rootLayout.setBackgroundColor(getResources().getColor(R.color.black));
