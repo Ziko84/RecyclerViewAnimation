@@ -18,6 +18,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -125,6 +126,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
                 parseJSON();
 
 
+
             }
         });
 
@@ -152,7 +154,6 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
                 //Add Data To SQLite DB async
                 AsyncTask aysnc_three = new AsyncTask(MainActivity.this);
                 aysnc_three.execute(creatorName, imageURL, "" + likeCount);
-                flowersRecyclerView.setVisibility(View.VISIBLE);
                 Toast.makeText(MainActivity.this, "Saved Data To SQLite DB", Toast.LENGTH_SHORT).show();
 
             }
@@ -161,6 +162,8 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
         difab_showInRV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                flowersRecyclerView.setVisibility(View.VISIBLE);
+
                 displayDataToRV();
             }
         });
@@ -191,10 +194,10 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
         likesList = new ArrayList<>();
 
         Cursor cursor = dBh.readAllDataFromDB();
-        if(cursor.getCount()==0){
+        if (cursor.getCount() == 0) {
             Toast.makeText(this, "No Data Available", Toast.LENGTH_SHORT).show();
-        }else{
-            while(cursor.moveToNext()){
+        } else {
+            while (cursor.moveToNext()) {
                 creatorList.add(cursor.getString(0));
                 imgUrlList.add(cursor.getString(1));
                 likesList.add(cursor.getInt(2));
@@ -267,7 +270,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
     public void onItemclick(int position) {
         Intent detailIntent = new Intent(this, DetailedActivity.class);
 //        YellowFlowerModel clickItem = mData.get(position);
-        YellowFlowerModel yFM = new YellowFlowerModel(imgUrlList.get(position), creatorList.get(position),likesList.get(position));
+        YellowFlowerModel yFM = new YellowFlowerModel(imgUrlList.get(position), creatorList.get(position), likesList.get(position));
         detailIntent.putExtra(EXTRA_CREATOR, yFM.getmCreator());
         detailIntent.putExtra(EXTRA_URL, yFM.getmImageUrl());
         detailIntent.putExtra(EXTRA_LIKES, yFM.getmLikes());
