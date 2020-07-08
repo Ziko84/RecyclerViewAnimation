@@ -7,6 +7,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -38,10 +40,11 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements RecyclerViewAdapter.onItemClickListener{
+public class MainActivity extends AppCompatActivity implements RecyclerViewAdapter.onItemClickListener {
 
     private RecyclerView flowersRecyclerView;
     private List<YellowFlowerModel> mData;
@@ -51,8 +54,16 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
     private EditText searchInput;
     private ArrayList<YellowFlowerModel> eSList = new ArrayList();
     private RequestQueue requestQueue;
+    private SQLiteDatabase mDataBae;
     DataBaseHelper dBh;
     AsyncTask aSync;
+
+    String creatorName = "";
+    String imageURL = "";
+    int likeCount = 0;
+
+    ArrayList<String> creatorList, imgUrlList;
+    ArrayList<Integer> likesList;
 
     public static final String EXTRA_URL = "imageURL";
     public static final String EXTRA_CREATOR = "creatorName";
@@ -70,16 +81,19 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
         //hide the action bar
         getSupportActionBar().hide();
 
-        //init Views, Recycler and List.
-        FloatingActionButton fav_saveToSQL = findViewById(R.id.saveToSQL_btn);
+        //init Views, Recycler, List and DB.
+        FloatingActionButton fab_saveToSQL = findViewById(R.id.saveToSQL_btn);
         FloatingActionButton fab = findViewById(R.id.fab_switcher);
+        FloatingActionButton fab_parseJson = findViewById(R.id.parseJson_btn);
+        FloatingActionButton difab_showInRV = findViewById(R.id.displayToRV_btn);
         rootLayout = findViewById(R.id.rootlayout);
         flowersRecyclerView = findViewById(R.id.news_recycler_view);
         flowersRecyclerView.setHasFixedSize(true);
-        mData = new ArrayList<>();
         searchInput = findViewById(R.id.et_search);
+        flowersRecyclerView.setVisibility(View.INVISIBLE);
 
         dBh = new DataBaseHelper(this);
+        mDataBae = dBh.getReadableDatabase();
 
         //Load the Theme State and pass to the adapter parameters below
         isDark = getThemeStatePref();
@@ -100,10 +114,18 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
 
         requestQueue = Volley.newRequestQueue(this);
 
-        parseJSON();
 
         //Set the Adapter
 //        adapterSetup();
+
+        fab_parseJson.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                parseJSON();
+
+
+            }
+        });
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -116,19 +138,32 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
                     searchInput.setBackgroundResource(R.drawable.card_bg);
                     rootLayout.setBackgroundColor(getResources().getColor(R.color.white));
                 }
-
-                adapter = new RecyclerViewAdapter(getApplicationContext(), mData, isDark);
-                flowersRecyclerView.setAdapter(adapter);
+//
+//                adapter = new RecyclerViewAdapter(getApplicationContext(), mData, isDark);
+//                flowersRecyclerView.setAdapter(adapter);
                 saveThemeStatePref(isDark);
             }
         });
 
-        fav_saveToSQL.setOnClickListener(new View.OnClickListener() {
+        fab_saveToSQL.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                parseJSON();
+                //Add Data To SQLite DB async
+                AsyncTask aysnc_three = new AsyncTask(MainActivity.this);
+                aysnc_three.execute(creatorName, imageURL, "" + likeCount);
+                flowersRecyclerView.setVisibility(View.VISIBLE);
+                Toast.makeText(MainActivity.this, "Saved Data To SQLite DB", Toast.LENGTH_SHORT).show();
+
             }
         });
+
+        difab_showInRV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                displayDataToRV();
+            }
+        });
+
 
         searchInput.addTextChangedListener(new TextWatcher() {
             @Override
@@ -148,6 +183,30 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
         });
     }
 
+    private void displayDataToRV() {
+        //Store data in arrays
+        creatorList = new ArrayList<>();
+        imgUrlList = new ArrayList<>();
+        likesList = new ArrayList<>();
+
+        Cursor cursor = dBh.readAllDataFromDB();
+        if(cursor.getCount()==0){
+            Toast.makeText(this, "No Data Available", Toast.LENGTH_SHORT).show();
+        }else{
+            while(cursor.moveToNext()){
+                creatorList.add(cursor.getString(0));
+                imgUrlList.add(cursor.getString(1));
+                likesList.add(cursor.getInt(2));
+            }
+        }
+        //fill the list
+//        mData.add(new YellowFlowerModel(imageURL, creatorName, likeCount));
+
+        //set Adapter
+        adapterSetup();
+
+    }
+
     private void parseJSON() {
         String url = "https://pixabay.com/api/?key=17376409-bfc9ecbbaae96da590445cc9e&q=yellow+flowers&image_type=photo&pretty=true";
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
@@ -157,27 +216,11 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
                     JSONArray jsonArray = response.getJSONArray("hits");
                     for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject hit = jsonArray.getJSONObject(i);
-                        String creatorName = hit.getString("user");
-                        String imageURL = hit.getString("webformatURL");
-                        int likeCount = hit.getInt("likes");
-
-                        //SQLite async part here
-
-//                        new AsyncTask(MainActivity.this).execute(creatorName, imageURL, ""+likeCount);
-//                        finish();
-//                        AsyncTask aysnc_two = new AsyncTask(MainActivity.this);
-//                        aysnc_two.execute(creatorName, imageURL, ""+likeCount);
-                        AsyncTask aysnc_three = new AsyncTask(MainActivity.this);
-                        aysnc_three.execute(creatorName, imageURL, ""+likeCount);
-
-
-                        mData.add(new YellowFlowerModel(imageURL, creatorName, likeCount));
-
-
+                        creatorName = hit.getString("user");
+                        imageURL = hit.getString("webformatURL");
+                        likeCount = hit.getInt("likes");
                     }
-
-                    adapterSetup();
-
+                    Toast.makeText(MainActivity.this, "JSON Parsed Successfully", Toast.LENGTH_SHORT).show();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -191,7 +234,6 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
         requestQueue.add(request);
 
     }
-
 
 
     private void saveThemeStatePref(boolean isDark) {
@@ -213,7 +255,8 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
     }
 
     private void adapterSetup() {
-        adapter = new RecyclerViewAdapter(this, mData, isDark);
+//        adapter = new RecyclerViewAdapter(this, mData, isDark);
+        adapter = new RecyclerViewAdapter(this, creatorList, imgUrlList, likesList, isDark);
         flowersRecyclerView.setAdapter(adapter);
         adapter.setOnItemClickListener(MainActivity.this);
         flowersRecyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -222,10 +265,16 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
     @Override
     public void onItemclick(int position) {
         Intent detailIntent = new Intent(this, DetailedActivity.class);
-        YellowFlowerModel clickItem = mData.get(position);
-        detailIntent.putExtra(EXTRA_URL, clickItem.getmImageUrl());
-        detailIntent.putExtra(EXTRA_CREATOR, clickItem.getmCreator());
-        detailIntent.putExtra(EXTRA_LIKES, clickItem.getmLikes());
+//        YellowFlowerModel clickItem = mData.get(position);
+        YellowFlowerModel yFM = new YellowFlowerModel(imgUrlList.get(position), creatorList.get(position),likesList.get(position));
+        detailIntent.putExtra(EXTRA_CREATOR, yFM.getmCreator());
+        detailIntent.putExtra(EXTRA_URL, yFM.getmImageUrl());
+        detailIntent.putExtra(EXTRA_LIKES, yFM.getmLikes());
         startActivity(detailIntent);
+    }
+
+    private Cursor getAllItemsFromDB() {
+        return mDataBae.query("flowers_table",
+                null, null, null, null, null, null);
     }
 }

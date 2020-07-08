@@ -5,33 +5,32 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".Activities.DetailedActivity">
+    tools:context=".Activities.DetailedActivity"
+    android:background="@color/card_bg_dark_color"
+    android:gravity="center">
 
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="300dp"
         android:src="@mipmap/ic_launcher"
-        android:layout_marginTop="16dp"
         android:id="@+id/image_view_detail"/>
 
     <TextView
         android:id="@+id/text_view_creator_detail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Creator Name"
+        android:text="@string/creator_nametwo"
         android:textSize="40sp"
-        android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
-        android:layout_marginLeft="16dp" />
+        android:textColor="@color/content_text_color"/>
 
     <TextView
         android:id="@+id/text_view_likes_detail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Likes: "
+        android:text="@string/likes_three"
         android:textSize="30sp"
-        android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
-        android:layout_marginLeft="16dp" />
+        android:textColor="@color/content_text_color"/>
 
 </LinearLayout>

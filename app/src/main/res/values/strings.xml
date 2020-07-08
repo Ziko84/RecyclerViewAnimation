@@ -9,4 +9,7 @@
     <string name="todo">TODO</string>
     <string name="name">Name</string>
     <string name="search">Search</string>
+    <string name="save_sqlite_db">Save SQLite DB</string>
+    <string name="creator_nametwo">Creator Name</string>
+    <string name="likes_three">Likes:</string>
 </resources>

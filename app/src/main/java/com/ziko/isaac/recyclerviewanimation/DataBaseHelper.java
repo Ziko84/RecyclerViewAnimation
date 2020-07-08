@@ -2,6 +2,7 @@ package com.ziko.isaac.recyclerviewanimation;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
@@ -32,5 +33,16 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
         long result = db.insert("flowers_table", null, cv);
         return result;
+    }
+
+    public Cursor readAllDataFromDB(){
+        String query = "SELECT * FROM flowers_table";
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = null;
+        if(db!=null){
+            cursor = db.rawQuery(query, null);
+        }
+    return cursor;
     }
 }
